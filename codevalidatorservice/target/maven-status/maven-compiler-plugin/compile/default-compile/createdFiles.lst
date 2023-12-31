@@ -1,0 +1,4 @@
+com\kelloggs\promotions\codevalidatorservice\services\impl\PromotionCodeServiceImpl.class
+com\kelloggs\promotions\codevalidatorservice\services\PromotionCodeService.class
+com\kelloggs\promotions\codevalidatorservice\CodeValidatorApp.class
+com\kelloggs\promotions\codevalidatorservice\controller\PromotionCodeController.class

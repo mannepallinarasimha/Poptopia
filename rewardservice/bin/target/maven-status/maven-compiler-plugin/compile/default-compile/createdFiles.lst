@@ -1,0 +1,6 @@
+com\kelloggs\promotions\rewardservice\RewardsApp.class
+com\kelloggs\promotions\rewardservice\service\RewardReportService.class
+com\kelloggs\promotions\rewardservice\controller\RewardController.class
+com\kelloggs\promotions\rewardservice\service\impl\RewardReportServiceImpl.class
+com\kelloggs\promotions\rewardservice\service\impl\RewardServiceImpl.class
+com\kelloggs\promotions\rewardservice\service\RewardService.class

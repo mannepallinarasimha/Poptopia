@@ -1,0 +1,13 @@
+com\kelloggs\promotions\winnerservice\controller\WinnerConfigController.class
+com\kelloggs\promotions\winnerservice\services\impl\PromotionPrizeServiceImpl.class
+com\kelloggs\promotions\winnerservice\controller\SpinWheelController.class
+com\kelloggs\promotions\winnerservice\services\WinnerService.class
+com\kelloggs\promotions\winnerservice\services\impl\WinnerServiceImpl.class
+com\kelloggs\promotions\winnerservice\WinnerApp.class
+com\kelloggs\promotions\winnerservice\services\PromotionPrizeService.class
+com\kelloggs\promotions\winnerservice\services\WinnerSelectionService.class
+com\kelloggs\promotions\winnerservice\services\impl\WinnerSelectionServiceImpl.class
+com\kelloggs\promotions\winnerservice\services\WinnerConfigService.class
+com\kelloggs\promotions\winnerservice\services\impl\WinnerConfigServiceImpl.class
+com\kelloggs\promotions\winnerservice\controller\WinnerController.class
+com\kelloggs\promotions\winnerservice\utilities\WinnerUtil.class
