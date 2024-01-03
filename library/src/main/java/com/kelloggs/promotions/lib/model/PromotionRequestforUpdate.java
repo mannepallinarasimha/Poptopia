@@ -3,19 +3,21 @@
  */
 package com.kelloggs.promotions.lib.model;
 
-
-public class PromotionRequest {
+/**
+ * 
+ */
+public class PromotionRequestforUpdate {
 
 	private Integer regionId;
 	private Integer promotionId;
 	private String moduleKey;
+	private String sweepStake;
 	private String localTimeZone;
-	private Integer epsilonId;
 	private String promotionName;
 	/**
 	 * 
 	 */
-	public PromotionRequest() {
+	public PromotionRequestforUpdate() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -23,18 +25,18 @@ public class PromotionRequest {
 	 * @param regionId
 	 * @param promotionId
 	 * @param moduleKey
+	 * @param sweepStake
 	 * @param localTimeZone
-	 * @param epsilonId
 	 * @param promotionName
 	 */
-	public PromotionRequest(Integer regionId, Integer promotionId, String moduleKey, String localTimeZone,
-			Integer epsilonId, String promotionName) {
+	public PromotionRequestforUpdate(Integer regionId, Integer promotionId, String moduleKey, String sweepStake,
+			String localTimeZone, String promotionName) {
 		super();
 		this.regionId = regionId;
 		this.promotionId = promotionId;
 		this.moduleKey = moduleKey;
+		this.sweepStake = sweepStake;
 		this.localTimeZone = localTimeZone;
-		this.epsilonId = epsilonId;
 		this.promotionName = promotionName;
 	}
 	/**
@@ -74,6 +76,18 @@ public class PromotionRequest {
 		this.moduleKey = moduleKey;
 	}
 	/**
+	 * @return the sweepStake
+	 */
+	public String getSweepStake() {
+		return sweepStake;
+	}
+	/**
+	 * @param sweepStake the sweepStake to set
+	 */
+	public void setSweepStake(String sweepStake) {
+		this.sweepStake = sweepStake;
+	}
+	/**
 	 * @return the localTimeZone
 	 */
 	public String getLocalTimeZone() {
@@ -84,18 +98,6 @@ public class PromotionRequest {
 	 */
 	public void setLocalTimeZone(String localTimeZone) {
 		this.localTimeZone = localTimeZone;
-	}
-	/**
-	 * @return the epsilonId
-	 */
-	public Integer getEpsilonId() {
-		return epsilonId;
-	}
-	/**
-	 * @param epsilonId the epsilonId to set
-	 */
-	public void setEpsilonId(Integer epsilonId) {
-		this.epsilonId = epsilonId;
 	}
 	/**
 	 * @return the promotionName
@@ -109,5 +111,6 @@ public class PromotionRequest {
 	public void setPromotionName(String promotionName) {
 		this.promotionName = promotionName;
 	}
+	
 	
 }

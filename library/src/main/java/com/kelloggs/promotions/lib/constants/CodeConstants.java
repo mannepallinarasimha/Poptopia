@@ -7,7 +7,10 @@ public enum CodeConstants {
 	WINNERS("WON"),
 	LOOSERS("LOST"),
 	PROMO_CODE_STATUS("PROMO_CODE_STATUS"),
-	DUPLICATE("duplicate");
+	DUPLICATE("duplicate"),
+	WM("wm"),
+	TOS("tos"),
+	POOL("pool");
 
     private String status;
 

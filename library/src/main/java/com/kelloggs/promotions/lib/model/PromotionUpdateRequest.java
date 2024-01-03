@@ -8,7 +8,7 @@ import java.util.List;
 public class PromotionUpdateRequest {
 	
 	private Integer clusterId;
-	private List<PromotionRequest> promotions;
+	private List<PromotionRequestforUpdate> promotions;
 	private MechanicRequest mechanic;
 	private List<PromotionSetting> settings;
 	/**
@@ -24,8 +24,8 @@ public class PromotionUpdateRequest {
 	 * @param mechanic
 	 * @param settings
 	 */
-	public PromotionUpdateRequest(Integer clusterId, List<PromotionRequest> promotions, MechanicRequest mechanic,
-			List<PromotionSetting> settings) {
+	public PromotionUpdateRequest(Integer clusterId, List<PromotionRequestforUpdate> promotions,
+			MechanicRequest mechanic, List<PromotionSetting> settings) {
 		super();
 		this.clusterId = clusterId;
 		this.promotions = promotions;
@@ -47,13 +47,13 @@ public class PromotionUpdateRequest {
 	/**
 	 * @return the promotions
 	 */
-	public List<PromotionRequest> getPromotions() {
+	public List<PromotionRequestforUpdate> getPromotions() {
 		return promotions;
 	}
 	/**
 	 * @param promotions the promotions to set
 	 */
-	public void setPromotions(List<PromotionRequest> promotions) {
+	public void setPromotions(List<PromotionRequestforUpdate> promotions) {
 		this.promotions = promotions;
 	}
 	/**
@@ -80,8 +80,5 @@ public class PromotionUpdateRequest {
 	public void setSettings(List<PromotionSetting> settings) {
 		this.settings = settings;
 	}
-	
-	
-	
 
 }

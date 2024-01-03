@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kelloggs.promotions.lib.entity.Promotion;
 import com.kelloggs.promotions.lib.model.ApiListResponse;
 import com.kelloggs.promotions.lib.model.ApiResponse;
+import com.kelloggs.promotions.lib.model.DeletePromotionRequest;
+import com.kelloggs.promotions.lib.model.DeletePromotionResponse;
 import com.kelloggs.promotions.lib.model.PromotionCreateRequest;
 import com.kelloggs.promotions.lib.model.PromotionResponse;
 import com.kelloggs.promotions.lib.model.PromotionUpdateRequest;
@@ -66,5 +69,9 @@ public class PromotionController {
     	return promotionService.updatePromotion(promotionUpdateRequest);
     }
     
+    @DeleteMapping(path="deletePromotion")
+    public ApiListResponse<DeletePromotionResponse> deletePromotion(@RequestBody @Valid DeletePromotionRequest deletePromotionRequest){
+    	return promotionService.deletePromotion(deletePromotionRequest);
+    }
 
 }
