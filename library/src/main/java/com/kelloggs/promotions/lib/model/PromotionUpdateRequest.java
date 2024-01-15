@@ -5,6 +5,14 @@ package com.kelloggs.promotions.lib.model;
 
 import java.util.List;
 
+/**
+ * Add PromotionUpdateRequest Entry for the particular PromotionIds
+ * 
+ * @param PromotionUpdateRequest
+ * 
+ * @author NARASIMHARAO MANNEPALLI (10700939)
+ * @since 3rd January 2024
+ */
 public class PromotionUpdateRequest {
 	
 	private Integer clusterId;

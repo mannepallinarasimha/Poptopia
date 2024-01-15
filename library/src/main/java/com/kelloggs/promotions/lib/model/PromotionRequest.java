@@ -3,7 +3,10 @@
  */
 package com.kelloggs.promotions.lib.model;
 
-
+/**
+ * Added PromotionRequest for createPromotion API
+ * @ Narasimharao Mannepalli(10700939)
+ */
 public class PromotionRequest {
 
 	private Integer regionId;

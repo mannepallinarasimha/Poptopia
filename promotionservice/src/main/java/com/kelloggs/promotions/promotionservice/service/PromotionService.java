@@ -24,10 +24,25 @@ public interface PromotionService {
      Promotion getPromotionById(Integer promotionId);
 
      ApiResponse<Promotion> addPromotion(Promotion promotion);
-
+     /**
+      * Add createPromotion for the PromotionService Layer
+      * 
+      * @author NARASIMHARAO MANNEPALLI (10700939)
+      * @since 5th January 2024
+      */
 	ApiListResponse<PromotionResponse> createPromotion(@Valid PromotionCreateRequest promotionCreateRequest);
-
+    /**
+     * Add updatePromotion for the PromotionService Layer
+     * 
+     * @author NARASIMHARAO MANNEPALLI (10700939)
+     * @since 5th January 2024
+     */
 	ApiListResponse<PromotionResponse> updatePromotion(@Valid PromotionUpdateRequest promotionUpdateRequest);
-
+    /**
+     * Add deletePromotion for the PromotionService Layer
+     * 
+     * @author NARASIMHARAO MANNEPALLI (10700939)
+     * @since 5th January 2024
+     */
 	ApiListResponse<DeletePromotionResponse> deletePromotion(@Valid DeletePromotionRequest deletePromotionRequest);
 }

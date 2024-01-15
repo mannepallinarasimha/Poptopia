@@ -48,7 +48,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 		"/api/v1/winners/entry/{promotionEntryId}/select").hasAnyRole("BLIPPAR", "AEM", "ADMIN")
                 .antMatchers("/api/v1/promotions/{promotionId}/user/game/entry", "/api/v1/promotions/user/get", 
                 		"/api/v1/promotions/user/update").hasAnyRole("JVM", "AEM", "ADMIN")
-                .antMatchers("/**").hasAnyRole("AEM", "ADMIN")
+                .antMatchers("/**").hasAnyRole("AEM", "ADMIN","POPTOPIA")
                 .anyRequest()
                 .authenticated()
                 .and()

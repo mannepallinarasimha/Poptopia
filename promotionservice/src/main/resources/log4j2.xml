@@ -12,8 +12,8 @@
 
 		<!-- Rolling File Appender -->
 		<RollingFile name="FileAppender"
-			fileName="/opt/gpp/logs/log4j2-promotionservice.log"
-			filePattern="/opt/gpp/logs/archive/promotionservice/log4j2-promotionservice-%d{yyyy-MM-dd}-%i.log">
+			fileName="/opt/poptopia/logs/log4j2-promotionservice.log"
+			filePattern="/opt/poptopia/logs/archive/promotionservice/log4j2-promotionservice-%d{yyyy-MM-dd}-%i.log">
 									
 			<PatternLayout>
 				<Pattern>${LOG_PATTERN}</Pattern>

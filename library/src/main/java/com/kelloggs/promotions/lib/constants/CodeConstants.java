@@ -8,6 +8,11 @@ public enum CodeConstants {
 	LOOSERS("LOST"),
 	PROMO_CODE_STATUS("PROMO_CODE_STATUS"),
 	DUPLICATE("duplicate"),
+	/*
+	 * Added wm tos and pool for createPromotion API
+	 * @Narasimharao Mannepalli(10700939)
+	 * 
+	 */
 	WM("wm"),
 	TOS("tos"),
 	POOL("pool");

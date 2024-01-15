@@ -57,18 +57,36 @@ public class PromotionController {
         return promotionService.addPromotion(promotion);
     }
     
+    /**
+     * Add createPromotionEntry for the PromotionController Layer
+     * 
+     * @author NARASIMHARAO MANNEPALLI (10700939)
+     * @since 5th January 2024
+     */
     @PostMapping(path="createPromotion")
     @ResponseStatus(HttpStatus.CREATED)    
     public ApiListResponse<PromotionResponse> createPromotionEntry(@RequestBody @Valid PromotionCreateRequest promotionCreateRequest){
     	return promotionService.createPromotion(promotionCreateRequest);
     }
     
+    /**
+     * Add updatePromotionEntry for the PromotionController Layer
+     * 
+     * @author NARASIMHARAO MANNEPALLI (10700939)
+     * @since 5th January 2024
+     */
     @PutMapping(path="updatePromotion")
     @ResponseStatus(HttpStatus.CREATED)
     public ApiListResponse<PromotionResponse> updatePromotionEntry(@RequestBody @Valid PromotionUpdateRequest promotionUpdateRequest){
     	return promotionService.updatePromotion(promotionUpdateRequest);
     }
     
+    /**
+     * Add deletePromotion for the PromotionController Layer
+     * 
+     * @author NARASIMHARAO MANNEPALLI (10700939)
+     * @since 5th January 2024
+     */
     @DeleteMapping(path="deletePromotion")
     public ApiListResponse<DeletePromotionResponse> deletePromotion(@RequestBody @Valid DeletePromotionRequest deletePromotionRequest){
     	return promotionService.deletePromotion(deletePromotionRequest);

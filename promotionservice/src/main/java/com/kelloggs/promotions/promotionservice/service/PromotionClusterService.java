@@ -1,8 +1,10 @@
 package com.kelloggs.promotions.promotionservice.service;
 
-import com.kelloggs.promotions.lib.entity.PromotionCluster;
+import com.kelloggs.promotions.lib.model.PromotionClusterDTO;
 
 public interface PromotionClusterService {
 
-     PromotionCluster addPromotionCluster(PromotionCluster promotionCluster);
+     PromotionClusterDTO addPromotionCluster(PromotionClusterDTO promotionCluster);
+     
+     PromotionClusterDTO deletePromotionCluster(Integer clusterId);
 }

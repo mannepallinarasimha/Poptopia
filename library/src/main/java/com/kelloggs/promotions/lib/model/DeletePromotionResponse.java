@@ -4,7 +4,8 @@
 package com.kelloggs.promotions.lib.model;
 
 /**
- * 
+ * Added DeletePromotionResponse for DeletePromotion API
+ * @ Narasimharao Mannepalli(10700939)
  */
 public class DeletePromotionResponse {
 

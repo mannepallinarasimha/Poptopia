@@ -15,9 +15,21 @@ public interface PromotionRepo extends JpaRepository<Promotion,Integer> {
 	
 	Optional<List<Promotion>>  findByPromotionClusterId(Integer clusterId); 
 	
+	/**
+	 * Added findByName for createPromotion API
+	 * @ Narasimharao Mannepalli(10700939)
+	 */
 	Optional<Promotion>  findByName(String promotionName); 
 	
+	/**
+	 * Added findByEpsilonId for createPromotion API
+	 * @ Narasimharao Mannepalli(10700939)
+	 */
 	Optional<Promotion>  findByEpsilonId(Integer epsilonId);
-	
+	/**
+	 * Added findByModuleKey for createPromotion API
+	 * @ Narasimharao Mannepalli(10700939)
+	 */
 	Optional<Promotion>  findByModuleKey(String moduleKey); 
+	
 }

@@ -8,7 +8,8 @@ import java.util.Date;
 import com.kelloggs.promotions.lib.entity.Region;
 
 /**
- * 
+ * Added PromotionResponse for createPromotion API
+ * @ Narasimharao Mannepalli(10700939)
  */
 public class PromotionResponse {
 

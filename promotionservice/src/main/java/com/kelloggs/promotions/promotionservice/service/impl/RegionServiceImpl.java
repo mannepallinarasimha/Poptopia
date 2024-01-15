@@ -8,6 +8,8 @@ import static com.kelloggs.promotions.lib.constants.ErrorCodes.NOT_FOUND;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -48,27 +50,36 @@ public class RegionServiceImpl implements RegionService {
 		List<RegionResponse> regionResponseList = new ArrayList<>();
 		if (!regions.isEmpty()) {
 			for (RegionRequest region : regions) {
-				Optional<Region> findRegionByLocale = regionRepo.findByLocale(region.getLocale());
-
-				if (findRegionByLocale.isPresent()) {
-					RegionResponse regionResponse = new RegionResponse();
-					regionResponse.setId(findRegionByLocale.get().getId());
-					regionResponse.setLocale(findRegionByLocale.get().getLocale());
-					regionResponseList.add(regionResponse);
+				if (region.getCountry() == null || region.getLocale() == null || region.getLocale().isEmpty()
+						|| region.getLocale().isBlank()) {
+					throw new ApiException(HttpStatus.BAD_REQUEST, 400,
+							String.format("Locale OR Country Must NOT be null OR Empty"));
 				} else {
-					Region regionToSave = new Region();
-					RegionResponse regionResponse = new RegionResponse();
-					regionToSave.setLocale(region.getLocale());
-					regionToSave.setCountry(region.getCountry());
-					Region regionFromDB = regionRepo.save(regionToSave);
-					regionResponse.setId(regionFromDB.getId());
-					regionResponse.setLocale(regionFromDB.getLocale());
-					regionResponseList.add(regionResponse);
+					Optional<Region> findRegionByLocale = regionRepo.findByLocale(region.getLocale());
+					if (findRegionByLocale.isPresent()) {
+						RegionResponse regionResponse = new RegionResponse();
+						regionResponse.setId(findRegionByLocale.get().getId());
+						regionResponse.setLocale(findRegionByLocale.get().getLocale());
+						regionResponseList.add(regionResponse);
+					} else {
+						Region regionToSave = new Region();
+						RegionResponse regionResponse = new RegionResponse();
+						if (region.getLocale().matches(".*\\d.*")) {
+							throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
+									.format("Locale %s Should NOT contain Any Numaric Values", region.getLocale()));
+						}
+						regionToSave.setLocale(region.getLocale());
+						regionToSave.setCountry(region.getCountry());
+						Region regionFromDB = regionRepo.save(regionToSave);
+						regionResponse.setId(regionFromDB.getId());
+						regionResponse.setLocale(regionFromDB.getLocale());
+						regionResponseList.add(regionResponse);
+					}
 				}
 			}
-		}else {
-			throw new ApiException(HttpStatus.BAD_REQUEST,
-					400, String.format("No Region Found "));
+
+		} else {
+			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format("No Region Found "));
 		}
 		return new ApiListResponse<>("All Regions :--- ", regionResponseList, regionResponseList.size());
 	}

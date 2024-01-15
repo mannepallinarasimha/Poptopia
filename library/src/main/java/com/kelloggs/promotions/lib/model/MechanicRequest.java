@@ -6,7 +6,8 @@ package com.kelloggs.promotions.lib.model;
 import java.util.Date;
 
 /**
- * 
+ * Added MechanicRequest for CreatePromotion API
+ * @ Narasimharao Mannepalli(10700939)
  */
 public class MechanicRequest {
 

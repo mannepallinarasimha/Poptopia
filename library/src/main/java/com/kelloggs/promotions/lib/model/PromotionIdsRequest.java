@@ -1,5 +1,8 @@
 package com.kelloggs.promotions.lib.model;
-
+/**
+ * Added PromotionIdsRequest for DeletePromotion API
+ * @ Narasimharao Mannepalli(10700939)
+ */
 public class PromotionIdsRequest {
 
 	private Integer promotionId;

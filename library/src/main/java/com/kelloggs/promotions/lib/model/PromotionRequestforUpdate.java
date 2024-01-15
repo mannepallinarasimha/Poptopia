@@ -4,7 +4,8 @@
 package com.kelloggs.promotions.lib.model;
 
 /**
- * 
+ * Added PromotionRequestforUpdate for updatePromotion API
+ * @ Narasimharao Mannepalli(10700939)
  */
 public class PromotionRequestforUpdate {
 
