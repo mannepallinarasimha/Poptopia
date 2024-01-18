@@ -41,13 +41,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/v1/users").permitAll()
-                .antMatchers("/api/v1/snipp/ocrInfo", "/api/v2/snipp/ocrInfo").hasAnyRole("SNIPP", "ADMIN")
+                .antMatchers("/api/v1/snipp/ocrInfo", "/api/v2/snipp/ocrInfo").hasAnyRole("SNIPP", "ADMIN","POPTOPIA")
                 .antMatchers("/api/v1/token/validate", "/api/v1/promotions/entry/{entryId}/update/score", 
-                		"/api/v1/promotions/{promotionId}/entries").hasAnyRole("BLIPPAR", "PEEKNPOKE", "AEM", "ADMIN")
+                		"/api/v1/promotions/{promotionId}/entries").hasAnyRole("BLIPPAR", "PEEKNPOKE", "AEM", "ADMIN","POPTOPIA")
                 .antMatchers("/api/v1/winners/entry/{entryId}/update/selection/result", 
-                		"/api/v1/winners/entry/{promotionEntryId}/select").hasAnyRole("BLIPPAR", "AEM", "ADMIN")
+                		"/api/v1/winners/entry/{promotionEntryId}/select").hasAnyRole("BLIPPAR", "AEM", "ADMIN","POPTOPIA")
                 .antMatchers("/api/v1/promotions/{promotionId}/user/game/entry", "/api/v1/promotions/user/get", 
-                		"/api/v1/promotions/user/update").hasAnyRole("JVM", "AEM", "ADMIN")
+                		"/api/v1/promotions/user/update").hasAnyRole("JVM", "AEM", "ADMIN","POPTOPIA")
                 .antMatchers("/**").hasAnyRole("AEM", "ADMIN","POPTOPIA")
                 .anyRequest()
                 .authenticated()

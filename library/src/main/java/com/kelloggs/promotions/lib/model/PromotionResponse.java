@@ -5,6 +5,7 @@ package com.kelloggs.promotions.lib.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kelloggs.promotions.lib.entity.Region;
 
 /**
@@ -18,8 +19,8 @@ public class PromotionResponse {
 	private Integer id;
 	private String name;
 	private Integer epsilonId;
-	private Date startDate;
-	private Date endDate;
+	private String startDate;
+	private String endDate;
 	private Integer maxLimit;
 	private String moduleKey;
 	private String localTimeZone;
@@ -41,6 +42,7 @@ public class PromotionResponse {
 	 * @param name
 	 * @param epsilonId
 	 * @param startDate
+	 * @param startDate_duplicate
 	 * @param endDate
 	 * @param maxLimit
 	 * @param moduleKey
@@ -51,8 +53,8 @@ public class PromotionResponse {
 	 * @param region
 	 */
 	public PromotionResponse(Date createDate, Date modifiedDate, Integer id, String name, Integer epsilonId,
-			Date startDate, Date endDate, Integer maxLimit, String moduleKey, String localTimeZone, String attr1_code,
-			String attr1_value, Integer winnerconfig, Region region) {
+			String startDate, String endDate, Integer maxLimit, String moduleKey,
+			String localTimeZone, String attr1_code, String attr1_value, Integer winnerconfig, Region region) {
 		super();
 		this.createDate = createDate;
 		this.modifiedDate = modifiedDate;
@@ -132,25 +134,25 @@ public class PromotionResponse {
 	/**
 	 * @return the startDate
 	 */
-	public Date getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
 	/**
 	 * @param startDate the startDate to set
 	 */
-	public void setStartDate(Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 	/**
 	 * @return the endDate
 	 */
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 	/**
 	 * @param endDate the endDate to set
 	 */
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 	/**
@@ -237,6 +239,5 @@ public class PromotionResponse {
 	public void setRegion(Region region) {
 		this.region = region;
 	}
-	
-	
+
 }
