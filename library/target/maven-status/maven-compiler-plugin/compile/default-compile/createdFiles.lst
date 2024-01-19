@@ -1,11 +1,13 @@
 com\kelloggs\promotions\lib\model\OcrInfo.class
 com\kelloggs\promotions\lib\model\BadRequest.class
 com\kelloggs\promotions\lib\model\ApiErrorResponseExtended.class
+com\kelloggs\promotions\lib\model\DeletePromotionResponse.class
 com\kelloggs\promotions\lib\entity\Status.class
 com\kelloggs\promotions\lib\configs\ApplicationConfig.class
 com\kelloggs\promotions\lib\model\PromoMetaObject.class
 com\kelloggs\promotions\lib\entity\RewardUsed.class
 com\kelloggs\promotions\lib\model\RewardReport.class
+com\kelloggs\promotions\lib\model\PromotionIdsRequest.class
 com\kelloggs\promotions\lib\entity\Retailer.class
 com\kelloggs\promotions\lib\entity\ReceiptHeader.class
 com\kelloggs\promotions\lib\rule\impl\RewardRuleExecutorServiceImpl.class
@@ -25,7 +27,10 @@ com\kelloggs\promotions\lib\repository\WinnerRepo.class
 com\kelloggs\promotions\lib\model\PromotionCreateRequest.class
 com\kelloggs\promotions\lib\repository\PromotionClusterRepo.class
 com\kelloggs\promotions\lib\constants\PrizeSelectorType.class
+com\kelloggs\promotions\lib\model\PromotionUpdateRequest.class
 com\kelloggs\promotions\lib\rule\PromoRuleService.class
+com\kelloggs\promotions\lib\model\DeletePromotionRequest.class
+com\kelloggs\promotions\lib\model\PromotionClusterDTO.class
 com\kelloggs\promotions\lib\rule\impl\PercentageBasedInstantWinnerSelector.class
 com\kelloggs\promotions\lib\entity\PromotionEntry.class
 com\kelloggs\promotions\lib\model\ItemDetails.class
@@ -44,6 +49,7 @@ com\kelloggs\promotions\lib\model\ApiResponse.class
 com\kelloggs\promotions\lib\model\RedeemRewardDTO.class
 com\kelloggs\promotions\lib\model\ApiListResponse.class
 com\kelloggs\promotions\lib\repository\RewardRepo.class
+com\kelloggs\promotions\lib\model\PromotionRequestforUpdate.class
 com\kelloggs\promotions\lib\model\ProductItem.class
 com\kelloggs\promotions\lib\entity\PromotionUser.class
 com\kelloggs\promotions\lib\repository\PromotionRepo.class

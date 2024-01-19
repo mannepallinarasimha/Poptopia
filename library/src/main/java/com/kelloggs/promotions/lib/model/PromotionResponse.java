@@ -3,9 +3,9 @@
  */
 package com.kelloggs.promotions.lib.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kelloggs.promotions.lib.entity.Region;
 
 /**
@@ -14,8 +14,8 @@ import com.kelloggs.promotions.lib.entity.Region;
  */
 public class PromotionResponse {
 
-	private Date createDate;
-	private Date modifiedDate;
+	private LocalDateTime createDate;
+	private LocalDateTime modifiedDate;
 	private Integer id;
 	private String name;
 	private Integer epsilonId;
@@ -52,7 +52,7 @@ public class PromotionResponse {
 	 * @param winnerconfig
 	 * @param region
 	 */
-	public PromotionResponse(Date createDate, Date modifiedDate, Integer id, String name, Integer epsilonId,
+	public PromotionResponse(LocalDateTime createDate, LocalDateTime modifiedDate, Integer id, String name, Integer epsilonId,
 			String startDate, String endDate, Integer maxLimit, String moduleKey,
 			String localTimeZone, String attr1_code, String attr1_value, Integer winnerconfig, Region region) {
 		super();
@@ -74,25 +74,25 @@ public class PromotionResponse {
 	/**
 	 * @return the createDate
 	 */
-	public Date getCreateDate() {
+	public LocalDateTime getCreateDate() {
 		return createDate;
 	}
 	/**
 	 * @param createDate the createDate to set
 	 */
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(LocalDateTime createDate) {
 		this.createDate = createDate;
 	}
 	/**
 	 * @return the modifiedDate
 	 */
-	public Date getModifiedDate() {
+	public LocalDateTime getModifiedDate() {
 		return modifiedDate;
 	}
 	/**
 	 * @param modifiedDate the modifiedDate to set
 	 */
-	public void setModifiedDate(Date modifiedDate) {
+	public void setModifiedDate(LocalDateTime modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
 	/**
