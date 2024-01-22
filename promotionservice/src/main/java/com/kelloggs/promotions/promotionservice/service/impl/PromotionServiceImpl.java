@@ -127,7 +127,7 @@ public class PromotionServiceImpl implements PromotionService {
 			promotionModuleKeyValidation(promotionRequest.getModuleKey());
 			promotionNameValidation(promotionRequest.getPromotionName());
 			promotionEpsilonIdValidation(promotionRequest.getEpsilonId());
-			
+
 		}
 		MechanicRequest mechanic = promotionCreateRequest.getMechanic();
 		final String df = "yyyy-MM-dd HH:mm:ss";
@@ -140,8 +140,9 @@ public class PromotionServiceImpl implements PromotionService {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
-		mechanicValidattion(mechanic.getType(), getRequiredStringDate(mechanic.getStartDate()), getRequiredStringDate(mechanic.getEndDate()));
+
+		mechanicValidattion(mechanic.getType(), getRequiredStringDate(mechanic.getStartDate()),
+				getRequiredStringDate(mechanic.getEndDate()));
 		String settingsValue = "";
 		List<PromotionSetting> settings = promotionCreateRequest.getSettings();
 		for (PromotionSetting promotionSetting : settings) {
@@ -178,10 +179,11 @@ public class PromotionServiceImpl implements PromotionService {
 				promotion.setPromotionCluster(findById.get());
 			} else {
 				throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
-						.format("Cluster with ClusterId \'%d\'' is NOT exists. ", promotionCreateRequest.getClusterId()));
+						.format("Cluster with ClusterId \'%d\'' is NOT exists. ",
+								promotionCreateRequest.getClusterId()));
 			}
-			 savedPromotion = promotionRepo.save(promotion);
-			
+			savedPromotion = promotionRepo.save(promotion);
+
 			promotionList.add(savedPromotion);
 			setPromotions.add(savedPromotion);
 		}
@@ -193,7 +195,6 @@ public class PromotionServiceImpl implements PromotionService {
 
 		return new ApiListResponse<>("All promotions :--- ", promotionResponseList, promotionResponseList.size());
 	}
-	
 
 	/**
 	 * Add updatePromotion for the particular PromotionIds
@@ -215,37 +216,38 @@ public class PromotionServiceImpl implements PromotionService {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400,
 					String.format("Required Promotions are Emplty ", promotionResponseList));
 		}
-		Optional<List<Promotion>> findByPromotionClusterId = promotionRepo.findByPromotionClusterId(promotionUpdateRequest.getClusterId());
-		if(findByPromotionClusterId.isPresent()) {
-			
+		Optional<List<Promotion>> findByPromotionClusterId = promotionRepo
+				.findByPromotionClusterId(promotionUpdateRequest.getClusterId());
+		if (findByPromotionClusterId.isPresent()) {
+
 			List<Promotion> promotionListFromClusterId = findByPromotionClusterId.get();
-				List<Integer> requestedPromotionIdsList = new ArrayList<>();
-				List<Integer> clusterPromotionIds = new ArrayList<>();
-				
-				List<PromotionRequestforUpdate> promotions = promotionUpdateRequest.getPromotions();
-				for (PromotionRequestforUpdate promotionRequestforUpdate : promotions) {
-					requestedPromotionIdsList.add(promotionRequestforUpdate.getPromotionId());
-				}
-				for(Promotion clusterPromotion :promotionListFromClusterId) {
-					clusterPromotionIds.add(clusterPromotion.getId());
-				}
-				
-				List<Integer> base = new ArrayList<Integer>(clusterPromotionIds);
-				base.removeAll(requestedPromotionIdsList);
-				if(!base.isEmpty()) {
-					throw new ApiException(HttpStatus.BAD_REQUEST, 400,
-							String.format("Please add these promotions for update \'%s\'", base.toString()));
-				}
+			List<Integer> requestedPromotionIdsList = new ArrayList<>();
+			List<Integer> clusterPromotionIds = new ArrayList<>();
+
+			List<PromotionRequestforUpdate> promotions = promotionUpdateRequest.getPromotions();
+			for (PromotionRequestforUpdate promotionRequestforUpdate : promotions) {
+				requestedPromotionIdsList.add(promotionRequestforUpdate.getPromotionId());
+			}
+			for (Promotion clusterPromotion : promotionListFromClusterId) {
+				clusterPromotionIds.add(clusterPromotion.getId());
+			}
+
+			List<Integer> base = new ArrayList<Integer>(clusterPromotionIds);
+			base.removeAll(requestedPromotionIdsList);
+			if (!base.isEmpty()) {
+				throw new ApiException(HttpStatus.BAD_REQUEST, 400,
+						String.format("Please add these promotions for update \'%s\'", base.toString()));
+			}
 		}
 		for (PromotionSetting promotionSetting : settings) {
 			promotionSettingValidation(promotionSetting.getName(), promotionSetting.getValue());
-				settingsValue = promotionSetting.getValue();
+			settingsValue = promotionSetting.getValue();
 		}
 		List<PromotionRequestforUpdate> promotionRequestList = promotionUpdateRequest.getPromotions();
 		for (PromotionRequestforUpdate promotionRequest : promotionRequestList) {
 
 			promotionIdsList.add(promotionRequest.getPromotionId());
-			
+
 			if (promotionRequest.getPromotionId() != null) {
 				promotionRegionIdValidation(promotionRequest.getRegionId());
 				Optional<Promotion> findById = promotionRepo.findById(promotionRequest.getPromotionId());
@@ -254,11 +256,12 @@ public class PromotionServiceImpl implements PromotionService {
 							"Promotion with PromotionId  \'%d\' is NOT exist .", promotionRequest.getPromotionId()));
 				}
 				if (findById.isPresent() || !findById.isPresent()) {
-					
+
 					if (!findById.get().getPromotionCluster().getClusterId()
 							.equals(promotionUpdateRequest.getClusterId())) {
 						throw new ApiException(HttpStatus.BAD_REQUEST, 400,
-								String.format("Promotion with PromotionId  \'%d\' is NOT assosciated with clusterId \'%d\' . ",
+								String.format(
+										"Promotion with PromotionId  \'%d\' is NOT assosciated with clusterId \'%d\' . ",
 										findById.get().getId(), promotionUpdateRequest.getClusterId()));
 					} else if (promotionRequest.getSweepStake() == null
 							|| promotionRequest.getSweepStake().equals(null)
@@ -269,8 +272,13 @@ public class PromotionServiceImpl implements PromotionService {
 					} else if (!promotionRequest.getSweepStake().isEmpty()
 							|| !promotionRequest.getSweepStake().equals(null)
 							|| !promotionRequest.getSweepStake().isBlank()) {
+						System.out.println(
+								"eplsilonID FROM Sweepstack " + Integer.parseInt(promotionRequest.getSweepStake()));
+						// Optional<Promotion> findByEpsilonId =
+						// promotionRepo.findByEpsilonId(Integer.parseInt(promotionRequest.getSweepStake()));
 						Optional<Promotion> findByEpsilonId = promotionRepo
 								.findByEpsilonId(Integer.parseInt(promotionRequest.getSweepStake()));
+						System.out.println("findByEpsilonId :::  " + findByEpsilonId);
 						if (findByEpsilonId.isPresent()
 								&& !(findByEpsilonId.get().getId().equals(promotionRequest.getPromotionId()))) {
 							throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
@@ -278,13 +286,46 @@ public class PromotionServiceImpl implements PromotionService {
 									Integer.parseInt(promotionRequest.getSweepStake()), findByEpsilonId.get().getId()));
 						}
 					}
-					promotionModuleKeyValidation(promotionRequest.getModuleKey());
-					promotionNameValidation(promotionRequest.getPromotionName());
+					if (promotionRequest.getModuleKey() == null
+							|| promotionRequest.getModuleKey().equals(null)
+							|| promotionRequest.getModuleKey().isEmpty()) {
+						throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
+								"Promotion with ModuleKey is \'%s\' now. It Should NOT be null or Empty ",
+								promotionRequest.getModuleKey()));
+					} else if (!promotionRequest.getModuleKey().isEmpty()
+							|| !promotionRequest.getModuleKey().equals(null)
+							|| !promotionRequest.getModuleKey().isBlank()) {
+						Optional<Promotion> findByModuleKey = promotionRepo
+								.findByModuleKey(promotionRequest.getModuleKey());
+						if (findByModuleKey.isPresent()
+								&& !(findByModuleKey.get().getId().equals(promotionRequest.getPromotionId()))) {
+							throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
+									.format("Promotion with ModuleKey \'%s\' is already Exists with PromotionId \'%d\'",
+											promotionRequest.getModuleKey(), findByModuleKey.get().getId()));
+						}
+					}
+					if (promotionRequest.getPromotionName() == null
+							|| promotionRequest.getPromotionName().equals(null)
+							|| promotionRequest.getPromotionName().isEmpty()) {
+						throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
+								"Promotion with Name is \'%s\' now. It Should NOT be null or Empty ",
+								promotionRequest.getPromotionName()));
+					} else if (!promotionRequest.getPromotionName().isEmpty()
+							|| !promotionRequest.getPromotionName().equals(null)
+							|| !promotionRequest.getPromotionName().isBlank()) {
+						Optional<Promotion> findByName = promotionRepo.findByName(promotionRequest.getPromotionName());
+						if (findByName.isPresent()
+								&& !(findByName.get().getId().equals(promotionRequest.getPromotionId()))) {
+							throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
+									.format("Promotion with Name \'%s\' is already Exists with PromotionId \'%d\'",
+											promotionRequest.getPromotionName(), findByName.get().getId()));
+						}
+					}
 				}
 			} else {
-				if (promotionRequest.getSweepStake()== null 
-					|| promotionRequest.getSweepStake().equals(null) 
-					|| promotionRequest.getSweepStake().isEmpty()) {
+				if (promotionRequest.getSweepStake() == null
+						|| promotionRequest.getSweepStake().equals(null)
+						|| promotionRequest.getSweepStake().isEmpty()) {
 					throw new ApiException(HttpStatus.BAD_REQUEST, 400,
 							String.format("Promotion with SweepStack is \'%s\' now. It Should NOT be null or Empty ",
 									promotionRequest.getSweepStake()));
@@ -293,8 +334,7 @@ public class PromotionServiceImpl implements PromotionService {
 						|| !promotionRequest.getSweepStake().isBlank()) {
 					Optional<Promotion> findByEpsilonId = promotionRepo
 							.findByEpsilonId(Integer.parseInt(promotionRequest.getSweepStake()));
-					if (findByEpsilonId.isPresent()
-							&& !(findByEpsilonId.get().getId().equals(promotionRequest.getPromotionId()))) {
+					if (findByEpsilonId.isPresent()) {
 						throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
 								"Promotion with SweepStack EpsilonId \'%d\' is already Exists with promotionId \'%d\' ",
 								Integer.parseInt(promotionRequest.getSweepStake()), findByEpsilonId.get().getId()));
@@ -315,9 +355,10 @@ public class PromotionServiceImpl implements PromotionService {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
-		mechanicValidattion(mechanic.getType(), getRequiredStringDate(mechanic.getStartDate()), getRequiredStringDate(mechanic.getEndDate()));
-		
+
+		mechanicValidattion(mechanic.getType(), getRequiredStringDate(mechanic.getStartDate()),
+				getRequiredStringDate(mechanic.getEndDate()));
+
 		for (PromotionSetting promotionSetting : settings) {
 			promotionSettingValidation(promotionSetting.getName(), promotionSetting.getValue());
 			settingsValue = promotionSetting.getValue();
@@ -348,7 +389,7 @@ public class PromotionServiceImpl implements PromotionService {
 			if (promotionRequest.getPromotionId() != null) {
 				Optional<Promotion> findById = promotionRepo.findById(promotionRequest.getPromotionId());
 				if (findById.isPresent()) {
-					
+
 					Promotion promotionFromDB = findById.get();
 					if (mechanic.getType().equalsIgnoreCase(CodeConstants.WM.getStatus())
 							|| mechanic.getType().equalsIgnoreCase(CodeConstants.TOS.getStatus())
@@ -399,10 +440,10 @@ public class PromotionServiceImpl implements PromotionService {
 					throw new ApiException(HttpStatus.BAD_REQUEST, 400,
 							String.format("Promotion with SweepStack Should NOT be null or Empty ",
 									promotionRequest.getSweepStake()));
-				}else {
+				} else {
 					newPromotion.setEpsilonId(Integer.parseInt(promotionRequest.getSweepStake()));
 				}
-				
+
 				if (promotionRequest.getModuleKey().equals(null) || promotionRequest.getModuleKey().isEmpty()) {
 					throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
 							"Promotion with ModuleKey Should NOT be null or Empty ", promotionRequest.getModuleKey()));
@@ -412,7 +453,8 @@ public class PromotionServiceImpl implements PromotionService {
 							.findByModuleKey(promotionRequest.getModuleKey());
 					if (findByModuleKey.isPresent()) {
 						throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
-								"Promotion with ModuleKey \'%s\' is already Exists with promotionId \'%d\'", promotionRequest.getModuleKey(), findByModuleKey.get().getId()));
+								"Promotion with ModuleKey \'%s\' is already Exists with promotionId \'%d\'",
+								promotionRequest.getModuleKey(), findByModuleKey.get().getId()));
 					} else {
 						newPromotion.setModuleKey(promotionRequest.getModuleKey());
 					}
@@ -427,7 +469,8 @@ public class PromotionServiceImpl implements PromotionService {
 					Optional<Promotion> findByName = promotionRepo.findByName(promotionRequest.getPromotionName());
 					if (findByName.isPresent()) {
 						throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
-								"Promotion with Name \'%s\' is already Exists with promotionId \'%d\'", promotionRequest.getPromotionName(), findByName.get().getId()));
+								"Promotion with Name \'%s\' is already Exists with promotionId \'%d\'",
+								promotionRequest.getPromotionName(), findByName.get().getId()));
 					} else {
 						newPromotion.setName(promotionRequest.getPromotionName());
 					}
@@ -438,7 +481,8 @@ public class PromotionServiceImpl implements PromotionService {
 				newPromotion.setPromotionCluster(promotionClusterDetails.get());
 				Region region = regionRepo.findById(promotionRequest.getRegionId())
 						.orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, 400,
-								String.format("Region with Region id \'%d\' not found", promotionRequest.getRegionId())));
+								String.format("Region with Region id \'%d\' not found",
+										promotionRequest.getRegionId())));
 				newPromotion.setRegion(region);
 				newPromotion.setCreatedDate(new Date());
 				newPromotion.setModifiedDate(new Date());
@@ -448,10 +492,10 @@ public class PromotionServiceImpl implements PromotionService {
 				newPromotion.setAttr1_code(mechanic.getAttr1_code());
 				newPromotion.setAttr1_value(mechanic.getAttr1_value());
 				savedPromotion = promotionRepo.save(newPromotion);
-				
+
 				setPromotions.add(savedPromotion);
 				promotionList.add(savedPromotion);
-				}
+			}
 		}
 		if (mechanic.getType().equalsIgnoreCase(CodeConstants.WM.getStatus())) {
 			wmStartDateCalculation(mechanicStartDate, mechanicEndDate, setPromotions, settingsValue);
@@ -474,31 +518,30 @@ public class PromotionServiceImpl implements PromotionService {
 		clusterIdValidation(deletePromotionRequest.getClusterId());
 		Optional<List<Promotion>> findByPromotionClusterId = promotionRepo
 				.findByPromotionClusterId(deletePromotionRequest.getClusterId());
-				List<PromotionIdsRequest> promotionIdsList = deletePromotionRequest.getPromotions().stream().collect(Collectors.toList());
-				List<Integer> promotionIds = new ArrayList<>();
-				for (PromotionIdsRequest promotionIdsRequest : promotionIdsList) {
-					promotionIds.add(promotionIdsRequest.getPromotionId());
-				}
-				int sizeFindByPromotionClusterId = 0;
-				int sizeDeletePromotionRequest = 0;
+		List<PromotionIdsRequest> promotionIdsList = deletePromotionRequest.getPromotions().stream()
+				.collect(Collectors.toList());
+		List<Integer> promotionIds = new ArrayList<>();
+		for (PromotionIdsRequest promotionIdsRequest : promotionIdsList) {
+			promotionIds.add(promotionIdsRequest.getPromotionId());
+		}
+		int sizeFindByPromotionClusterId = 0;
+		int sizeDeletePromotionRequest = 0;
 		if (!findByPromotionClusterId.isPresent() && !(promotionIdsList.isEmpty())) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
-					"No Promotions Present with ClusterId  \'%d\' But \'%s\' promotionIds are provided in the request for deletion. ", deletePromotionRequest.getClusterId(), promotionIds.toString()));
+					"No Promotions Present with ClusterId  \'%d\' But \'%s\' promotionIds are provided in the request for deletion. ",
+					deletePromotionRequest.getClusterId(), promotionIds.toString()));
 		}
-
 
 		List<DeletePromotionResponse> deletePromotionResponseList = new ArrayList<>();
 		List<PromotionIdsRequest> promotions = deletePromotionRequest.getPromotions();
-		 if (deletePromotionRequest.getPromotions().isEmpty()) {
+		if (deletePromotionRequest.getPromotions().isEmpty()) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400,
 					String.format("Required Promotions are Emplty ", deletePromotionResponseList));
-		}else if(sizeFindByPromotionClusterId != 0 && sizeDeletePromotionRequest != 0){
+		} else if (sizeFindByPromotionClusterId != 0 && sizeDeletePromotionRequest != 0) {
 			sizeFindByPromotionClusterId = findByPromotionClusterId.get().size();
 			sizeDeletePromotionRequest = deletePromotionRequest.getPromotions().size();
-		}
-		 else {
+		} else {
 			for (PromotionIdsRequest promotionIdsRequest : promotions) {
-				// check All the promotions are there in Table or NOT
 				Optional<Promotion> findById = promotionRepo.findById(promotionIdsRequest.getPromotionId());
 				if (!findById.isPresent()) {
 					throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
@@ -522,7 +565,7 @@ public class PromotionServiceImpl implements PromotionService {
 						"select config_id from winner_selection_config_reference where promotion_id="
 								+ findById.get().getId());
 				List<Integer> resultList = (List<Integer>) query.getResultList();
-				if (sizeFindByPromotionClusterId == sizeDeletePromotionRequest) {
+				if (findByPromotionClusterId.get().size() == deletePromotionRequest.getPromotions().size()) {
 					if (!resultList.isEmpty()) {
 						for (Integer configId : resultList) {
 							winnerConfigRepo.deleteById(configId);
@@ -547,16 +590,17 @@ public class PromotionServiceImpl implements PromotionService {
 		return new ApiListResponse<>("All promotions :--- ", deletePromotionResponseList,
 				deletePromotionResponseList.size());
 	}
-	
+
 	/**
 	 * Add promotionResponseSetUp for the PromotionServiceInpl Layer
 	 * 
 	 * @author NARASIMHARAO MANNEPALLI (10700939)
 	 * @since 5th January 2024
-	 */	
-	public List<PromotionResponse> promotionResponseSetUp(List<Promotion> savedPromotions, String mechanicStartDate, String mechanicEndDate) {
+	 */
+	public List<PromotionResponse> promotionResponseSetUp(List<Promotion> savedPromotions, String mechanicStartDate,
+			String mechanicEndDate) {
 		List<PromotionResponse> promotionResponseList = new ArrayList<>();
-		
+
 		for (Promotion savedPromotion : savedPromotions) {
 			PromotionResponse promotionResponse = new PromotionResponse();
 			Date date = new Date();
@@ -582,10 +626,9 @@ public class PromotionServiceImpl implements PromotionService {
 			promotionResponse.setRegion(savedPromotion.getRegion());
 			promotionResponseList.add(promotionResponse);
 		}
-		
+
 		return promotionResponseList;
 	}
-	
 
 	/**
 	 * Add winnerCongigSetUp for the PromotionServiceInpl Layer
@@ -607,7 +650,7 @@ public class PromotionServiceImpl implements PromotionService {
 		winnerConfig.setPromotion(setPromotions);
 		return winnerConfig;
 	}
-	
+
 	/**
 	 * Add clusterIdValidation for the PromotionServiceImpl Layer
 	 * 
@@ -615,17 +658,18 @@ public class PromotionServiceImpl implements PromotionService {
 	 * @since 17th January 2024
 	 */
 	public void clusterIdValidation(Integer promotionClusterId) {
-		if(promotionClusterId == null 
-				   || promotionClusterId == 0) {
-					throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
-							.format("ClusterId is \'%d\' now. It Must NOT be Zero OR null OR EMPTY OR Blank", promotionClusterId));
-				}else {
-					promotionClusterRepo.findById(promotionClusterId)
+		if (promotionClusterId == null
+				|| promotionClusterId == 0) {
+			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
+					.format("ClusterId is \'%d\' now. It Must NOT be Zero OR null OR EMPTY OR Blank",
+							promotionClusterId));
+		} else {
+			promotionClusterRepo.findById(promotionClusterId)
 					.orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, 400,
 							String.format("Cluster with ClusterId \'%d\' not found", promotionClusterId)));
-				}
+		}
 	}
-	
+
 	/**
 	 * Add promotionRegionIdValidation for the PromotionServiceImpl Layer
 	 * 
@@ -633,17 +677,18 @@ public class PromotionServiceImpl implements PromotionService {
 	 * @since 17th January 2024
 	 */
 	public void promotionRegionIdValidation(Integer promotionRegionId) {
-		if(promotionRegionId == null 
-				   || promotionRegionId == 0) {
-					throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
-							.format("RegionId is \'%d\' now. It Must NOT be Zero OR null OR EMPTY OR Blank", promotionRegionId));
-				}else {
-					regionRepo.findById(promotionRegionId)
+		if (promotionRegionId == null
+				|| promotionRegionId == 0) {
+			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
+					.format("RegionId is \'%d\' now. It Must NOT be Zero OR null OR EMPTY OR Blank",
+							promotionRegionId));
+		} else {
+			regionRepo.findById(promotionRegionId)
 					.orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, 400,
 							String.format("Region with Region id \'%d\' not found", promotionRegionId)));
-				}
+		}
 	}
-	
+
 	/**
 	 * Add promotionSettingValidation for the PromotionServiceImpl Layer
 	 * 
@@ -651,17 +696,16 @@ public class PromotionServiceImpl implements PromotionService {
 	 * @since 17th January 2024
 	 */
 	public void promotionSettingValidation(String settingName, String settingValue) {
-		if(settingName == null || settingValue == null
-				||	settingName.isEmpty() || settingName.isBlank()
-				||	settingValue.isEmpty() || settingValue.isBlank()	
-				||	settingValue.equals("0") || settingValue.equals(null)	
-					) {
-				throw new ApiException(HttpStatus.BAD_REQUEST, 400,
-						String.format("Setting value is \'%s\' now. It should NOT be Zero OR NULL OR EMPTY OR BLANK",
-								settingValue));		
-			}
+		if (settingName == null || settingValue == null
+				|| settingName.isEmpty() || settingName.isBlank()
+				|| settingValue.isEmpty() || settingValue.isBlank()
+				|| settingValue.equals("0") || settingValue.equals(null)) {
+			throw new ApiException(HttpStatus.BAD_REQUEST, 400,
+					String.format("Setting value is \'%s\' now. It should NOT be Zero OR NULL OR EMPTY OR BLANK",
+							settingValue));
+		}
 	}
-	
+
 	/**
 	 * Add promotionEpsilonIdValidation for the PromotionServiceImpl Layer
 	 * 
@@ -669,21 +713,23 @@ public class PromotionServiceImpl implements PromotionService {
 	 * @since 17th January 2024
 	 */
 	public void promotionEpsilonIdValidation(Integer promotionEpsilonId) {
-		if (promotionEpsilonId == null 
-				|| promotionEpsilonId.equals(null) 
-				|| promotionEpsilonId == 0 ) {
+		if (promotionEpsilonId == null
+				|| promotionEpsilonId.equals(null)
+				|| promotionEpsilonId == 0) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
-					"Promotion with EpsilonId is \'%d\' now. It Should NOT be Zero or null or Empty ", promotionEpsilonId));
-		}else if (!promotionEpsilonId.equals(null) 
+					"Promotion with EpsilonId is \'%d\' now. It Should NOT be Zero or null or Empty ",
+					promotionEpsilonId));
+		} else if (!promotionEpsilonId.equals(null)
 				|| promotionEpsilonId != 0) {
 			Optional<Promotion> findByEpsilonId = promotionRepo.findByEpsilonId(promotionEpsilonId);
 			if (findByEpsilonId.isPresent()) {
 				throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
-						.format("Promotion with EpsilonId \'%d\' is already Exists with PromotionId \'%d\' ", promotionEpsilonId, findByEpsilonId.get().getId()));
+						.format("Promotion with EpsilonId \'%d\' is already Exists with PromotionId \'%d\' ",
+								promotionEpsilonId, findByEpsilonId.get().getId()));
 			}
 		}
 	}
-	
+
 	/**
 	 * Add promotionModuleKeyValidation for the PromotionServiceImpl Layer
 	 * 
@@ -691,22 +737,23 @@ public class PromotionServiceImpl implements PromotionService {
 	 * @since 17th January 2024
 	 */
 	public void promotionModuleKeyValidation(String promotionModuleKey) {
-		if (promotionModuleKey== null 
-				|| promotionModuleKey.equals(null) 
+		if (promotionModuleKey == null
+				|| promotionModuleKey.equals(null)
 				|| promotionModuleKey.isEmpty()) {
-				throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
-						"Promotion with ModuleKey is \'%s\' now. It Should NOT be null or Empty ", promotionModuleKey));
-			} else if (!promotionModuleKey.isEmpty() 
-					|| !promotionModuleKey.equals(null)
-					|| !promotionModuleKey.isBlank()) {
-				Optional<Promotion> findByModuleKey = promotionRepo.findByModuleKey(promotionModuleKey);
-				if (findByModuleKey.isPresent()) {
-					throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
-							.format("Promotion with ModuleKey \'%s\' is already Exists with PromotionId \'%d\'", promotionModuleKey, findByModuleKey.get().getId()));
-				}
+			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
+					"Promotion with ModuleKey is \'%s\' now. It Should NOT be null or Empty ", promotionModuleKey));
+		} else if (!promotionModuleKey.isEmpty()
+				|| !promotionModuleKey.equals(null)
+				|| !promotionModuleKey.isBlank()) {
+			Optional<Promotion> findByModuleKey = promotionRepo.findByModuleKey(promotionModuleKey);
+			if (findByModuleKey.isPresent()) {
+				throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
+						.format("Promotion with ModuleKey \'%s\' is already Exists with PromotionId \'%d\'",
+								promotionModuleKey, findByModuleKey.get().getId()));
 			}
+		}
 	}
-	
+
 	/**
 	 * Add mechanicValidattion for the PromotionServiceImpl Layer
 	 * 
@@ -714,8 +761,8 @@ public class PromotionServiceImpl implements PromotionService {
 	 * @since 17th January 2024
 	 */
 	public void mechanicValidattion(String mechanicType, String mechanicStartDate, String mechanicEndDate) {
-//		Date mechanicStartDateFormat = new Date(mechanicStartDate);
-//		Date mechanicEndDateFormat = new Date(mechanicEndDate);
+		// Date mechanicStartDateFormat = new Date(mechanicStartDate);
+		// Date mechanicEndDateFormat = new Date(mechanicEndDate);
 		final String df = "yyyy-MM-dd HH:mm:ss";
 		SimpleDateFormat simpleDateFormate = new SimpleDateFormat(df);
 		Date mechanicStartDateFormat = null;
@@ -726,34 +773,35 @@ public class PromotionServiceImpl implements PromotionService {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		if(mechanicType == null 
-				|| mechanicType.isBlank() 
+		if (mechanicType == null
+				|| mechanicType.isBlank()
 				|| mechanicType.isBlank()) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400,
-					String.format("Mechanic with Type MUST NOT be null OR Empty"));	
-		}else if(mechanicEndDate == null 
+					String.format("Mechanic with Type MUST NOT be null OR Empty"));
+		} else if (mechanicEndDate == null
 				|| mechanicStartDate == null) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400,
 					String.format("Mechanic with StartDate and EndDate MUST NOT be null OR Empty"));
-		}else if (!(isDatePastTodayFuture(mechanicStartDate, df))) {
+		} else if (!(isDatePastTodayFuture(mechanicStartDate, df))) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
 					.format("Mechanic with Start Date \'%s\'  MUST NOT be past dates.", mechanicStartDate));
-		}else if (!(isDatePastTodayFuture(mechanicEndDate, df))) {
+		} else if (!(isDatePastTodayFuture(mechanicEndDate, df))) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
 					.format("Mechanic with End Date \'%s\'  MUST NOT be past dates.", mechanicEndDate));
-		}else if (!(mechanicEndDateFormat.getTime() > mechanicStartDateFormat.getTime())) {
+		} else if (!(mechanicEndDateFormat.getTime() > mechanicStartDateFormat.getTime())) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
-					.format("Mechanic with End Date \'%s\' must be Grater Than Start Date \'%s\'", mechanicEndDate, mechanicStartDate));
-		}else if (mechanicType.equalsIgnoreCase(CodeConstants.WM.getStatus())
-				||mechanicType.equalsIgnoreCase(CodeConstants.TOS.getStatus())
-				||mechanicType.equalsIgnoreCase(CodeConstants.POOL.getStatus())) {
+					.format("Mechanic with End Date \'%s\' must be Grater Than Start Date \'%s\'", mechanicEndDate,
+							mechanicStartDate));
+		} else if (mechanicType.equalsIgnoreCase(CodeConstants.WM.getStatus())
+				|| mechanicType.equalsIgnoreCase(CodeConstants.TOS.getStatus())
+				|| mechanicType.equalsIgnoreCase(CodeConstants.POOL.getStatus())) {
 		} else {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400,
 					String.format("Mechanic with Type \'%s\' is NOT matching with \'wm\' or \'tos\' or \'pool\' ",
 							mechanicType));
-		} 
+		}
 	}
-	
+
 	/**
 	 * Add promotionNameValidation for the PromotionServiceImpl Layer
 	 * 
@@ -761,8 +809,8 @@ public class PromotionServiceImpl implements PromotionService {
 	 * @since 17th January 2024
 	 */
 	public void promotionNameValidation(String promotionName) {
-		if (promotionName== null 
-				|| promotionName.equals(null) 
+		if (promotionName == null
+				|| promotionName.equals(null)
 				|| promotionName.isEmpty()) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
 					"Promotion with Name is \'%s\' now. It Should NOT be null or Empty ", promotionName));
@@ -772,11 +820,12 @@ public class PromotionServiceImpl implements PromotionService {
 			Optional<Promotion> findByName = promotionRepo.findByName(promotionName);
 			if (findByName.isPresent()) {
 				throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
-						.format("Promotion with Name \'%s\' is already Exists with PromotionId \'%d\'", promotionName, findByName.get().getId()));
+						.format("Promotion with Name \'%s\' is already Exists with PromotionId \'%d\'", promotionName,
+								findByName.get().getId()));
 			}
 		}
 	}
-	
+
 	/**
 	 * Add getRandomNumber for the PromotionServiceImpl Layer
 	 * 
@@ -784,20 +833,20 @@ public class PromotionServiceImpl implements PromotionService {
 	 * @since 17th January 2024
 	 */
 	public static int getRandomNumber(int min, int max) {
-	    return (int) ((Math.random() * (max - min)) + min);
+		return (int) ((Math.random() * (max - min)) + min);
 	}
-	
+
 	/**
 	 * Add getRequiredStringDate for the PromotionServiceImpl Layer
 	 * 
 	 * @author NARASIMHARAO MANNEPALLI (10700939)
 	 * @since 18th January 2024
-	 */	
-    public static String getRequiredStringDate(String str){
-        String[] ts = str.split("T");
-        return ts[0]+" "+ts[1].substring(0,8);
-    }
-	
+	 */
+	public static String getRequiredStringDate(String str) {
+		String[] ts = str.split("T");
+		return ts[0] + " " + ts[1].substring(0, 8);
+	}
+
 	/**
 	 * Add isDatePastTodayFuture for the PromotionServiceImpl Layer
 	 * 
@@ -817,26 +866,27 @@ public class PromotionServiceImpl implements PromotionService {
 		}
 		return flag;
 	}
-	
+
 	/**
 	 * Add wmStartDateCalculation for the PromotionServiceImpl Layer
 	 * 
 	 * @author NARASIMHARAO MANNEPALLI (10700939)
 	 * @since 17th January 2024
 	 */
-	public void wmStartDateCalculation(Date mechanicStartDate, Date mechanicEndDate, Set<Promotion> setPromotions, String settingsValue) {
+	public void wmStartDateCalculation(Date mechanicStartDate, Date mechanicEndDate, Set<Promotion> setPromotions,
+			String settingsValue) {
 
-		long startDateMillis = mechanicStartDate. getTime();
-		long endDateMillis = mechanicEndDate. getTime();
+		long startDateMillis = mechanicStartDate.getTime();
+		long endDateMillis = mechanicEndDate.getTime();
 		int periodTime = (int) ((endDateMillis - startDateMillis)
 				/ Integer.parseInt(settingsValue));
-		for (int i=0;i<Integer.parseInt(settingsValue);i++) {
-			int randomNumber=getRandomNumber(1,periodTime);
-			long prizetime=startDateMillis+randomNumber;
-            Date prizeTimeDate = new Date(prizetime);
-            long endtime = endDateMillis;
-            Date resend = new Date(endtime);
-            startDateMillis=startDateMillis+periodTime;
+		for (int i = 0; i < Integer.parseInt(settingsValue); i++) {
+			int randomNumber = getRandomNumber(1, periodTime);
+			long prizetime = startDateMillis + randomNumber;
+			Date prizeTimeDate = new Date(prizetime);
+			long endtime = endDateMillis;
+			Date resend = new Date(endtime);
+			startDateMillis = startDateMillis + periodTime;
 			WinnerConfig winnerConfig = winnerConfigSetUp(setPromotions, prizeTimeDate, mechanicEndDate);
 			winnerConfigRepo.save(winnerConfig);
 		}
