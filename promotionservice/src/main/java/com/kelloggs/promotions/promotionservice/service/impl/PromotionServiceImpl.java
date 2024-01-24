@@ -263,27 +263,27 @@ public class PromotionServiceImpl implements PromotionService {
 								String.format(
 										"Promotion with PromotionId  \'%d\' is NOT assosciated with clusterId \'%d\' . ",
 										findById.get().getId(), promotionUpdateRequest.getClusterId()));
-					} else if (promotionRequest.getSweepStake() == null
-							|| promotionRequest.getSweepStake().equals(null)
-							|| promotionRequest.getSweepStake().isEmpty()) {
+					} else if (promotionRequest.getEpsilonId() == null
+							|| promotionRequest.getEpsilonId().equals(null)
+							|| promotionRequest.getEpsilonId().isEmpty()) {
 						throw new ApiException(HttpStatus.BAD_REQUEST, 400,
 								String.format("Promotion with SweepStack \'%s\' Should NOT be null or Empty ",
-										promotionRequest.getSweepStake()));
-					} else if (!promotionRequest.getSweepStake().isEmpty()
-							|| !promotionRequest.getSweepStake().equals(null)
-							|| !promotionRequest.getSweepStake().isBlank()) {
+										promotionRequest.getEpsilonId()));
+					} else if (!promotionRequest.getEpsilonId().isEmpty()
+							|| !promotionRequest.getEpsilonId().equals(null)
+							|| !promotionRequest.getEpsilonId().isBlank()) {
 						System.out.println(
-								"eplsilonID FROM Sweepstack " + Integer.parseInt(promotionRequest.getSweepStake()));
+								"eplsilonID FROM Sweepstack " + Integer.parseInt(promotionRequest.getEpsilonId()));
 						// Optional<Promotion> findByEpsilonId =
 						// promotionRepo.findByEpsilonId(Integer.parseInt(promotionRequest.getSweepStake()));
 						Optional<Promotion> findByEpsilonId = promotionRepo
-								.findByEpsilonId(Integer.parseInt(promotionRequest.getSweepStake()));
+								.findByEpsilonId(Integer.parseInt(promotionRequest.getEpsilonId()));
 						System.out.println("findByEpsilonId :::  " + findByEpsilonId);
 						if (findByEpsilonId.isPresent()
 								&& !(findByEpsilonId.get().getId().equals(promotionRequest.getPromotionId()))) {
 							throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
 									"Promotion with SweepStack EpsilonId \'%d\' is already Exists with promotionId \'%d\' ",
-									Integer.parseInt(promotionRequest.getSweepStake()), findByEpsilonId.get().getId()));
+									Integer.parseInt(promotionRequest.getEpsilonId()), findByEpsilonId.get().getId()));
 						}
 					}
 					if (promotionRequest.getModuleKey() == null
@@ -323,21 +323,21 @@ public class PromotionServiceImpl implements PromotionService {
 					}
 				}
 			} else {
-				if (promotionRequest.getSweepStake() == null
-						|| promotionRequest.getSweepStake().equals(null)
-						|| promotionRequest.getSweepStake().isEmpty()) {
+				if (promotionRequest.getEpsilonId() == null
+						|| promotionRequest.getEpsilonId().equals(null)
+						|| promotionRequest.getEpsilonId().isEmpty()) {
 					throw new ApiException(HttpStatus.BAD_REQUEST, 400,
 							String.format("Promotion with SweepStack is \'%s\' now. It Should NOT be null or Empty ",
-									promotionRequest.getSweepStake()));
-				} else if (!promotionRequest.getSweepStake().isEmpty()
-						|| !promotionRequest.getSweepStake().equals(null)
-						|| !promotionRequest.getSweepStake().isBlank()) {
+									promotionRequest.getEpsilonId()));
+				} else if (!promotionRequest.getEpsilonId().isEmpty()
+						|| !promotionRequest.getEpsilonId().equals(null)
+						|| !promotionRequest.getEpsilonId().isBlank()) {
 					Optional<Promotion> findByEpsilonId = promotionRepo
-							.findByEpsilonId(Integer.parseInt(promotionRequest.getSweepStake()));
+							.findByEpsilonId(Integer.parseInt(promotionRequest.getEpsilonId()));
 					if (findByEpsilonId.isPresent()) {
 						throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
 								"Promotion with SweepStack EpsilonId \'%d\' is already Exists with promotionId \'%d\' ",
-								Integer.parseInt(promotionRequest.getSweepStake()), findByEpsilonId.get().getId()));
+								Integer.parseInt(promotionRequest.getEpsilonId()), findByEpsilonId.get().getId()));
 					}
 				}
 				promotionModuleKeyValidation(promotionRequest.getModuleKey());
@@ -411,7 +411,7 @@ public class PromotionServiceImpl implements PromotionService {
 					promotionFromDB.setRegion(region);
 					promotionFromDB.setCreatedDate(new Date());
 					promotionFromDB.setModifiedDate(new Date());
-					promotionFromDB.setEpsilonId(Integer.parseInt(promotionRequest.getSweepStake()));
+					promotionFromDB.setEpsilonId(Integer.parseInt(promotionRequest.getEpsilonId()));
 					promotionFromDB.setName(promotionRequest.getPromotionName());
 					promotionFromDB.setModuleKey(promotionRequest.getModuleKey());
 					promotionFromDB.setEndDate(mechanicEndDate);
@@ -436,12 +436,12 @@ public class PromotionServiceImpl implements PromotionService {
 									mechanic.getType()));
 				}
 
-				if (promotionRequest.getSweepStake().equals(null) || promotionRequest.getSweepStake().isEmpty()) {
+				if (promotionRequest.getEpsilonId().equals(null) || promotionRequest.getEpsilonId().isEmpty()) {
 					throw new ApiException(HttpStatus.BAD_REQUEST, 400,
 							String.format("Promotion with SweepStack Should NOT be null or Empty ",
-									promotionRequest.getSweepStake()));
+									promotionRequest.getEpsilonId()));
 				} else {
-					newPromotion.setEpsilonId(Integer.parseInt(promotionRequest.getSweepStake()));
+					newPromotion.setEpsilonId(Integer.parseInt(promotionRequest.getEpsilonId()));
 				}
 
 				if (promotionRequest.getModuleKey().equals(null) || promotionRequest.getModuleKey().isEmpty()) {

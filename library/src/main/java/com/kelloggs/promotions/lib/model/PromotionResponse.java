@@ -3,7 +3,6 @@
  */
 package com.kelloggs.promotions.lib.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.kelloggs.promotions.lib.entity.Region;

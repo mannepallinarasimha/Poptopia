@@ -31,5 +31,4 @@ public interface PromotionRepo extends JpaRepository<Promotion,Integer> {
 	 * @ Narasimharao Mannepalli(10700939)
 	 */
 	Optional<Promotion>  findByModuleKey(String moduleKey); 
-	
 }

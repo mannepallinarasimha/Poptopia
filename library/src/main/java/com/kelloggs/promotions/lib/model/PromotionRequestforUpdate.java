@@ -12,7 +12,7 @@ public class PromotionRequestforUpdate {
 	private Integer regionId;
 	private Integer promotionId;
 	private String moduleKey;
-	private String sweepStake;
+	private String epsilonId;
 	private String localTimeZone;
 	private String promotionName;
 	/**
@@ -30,13 +30,13 @@ public class PromotionRequestforUpdate {
 	 * @param localTimeZone
 	 * @param promotionName
 	 */
-	public PromotionRequestforUpdate(Integer regionId, Integer promotionId, String moduleKey, String sweepStake,
+	public PromotionRequestforUpdate(Integer regionId, Integer promotionId, String moduleKey, String epsilonId,
 			String localTimeZone, String promotionName) {
 		super();
 		this.regionId = regionId;
 		this.promotionId = promotionId;
 		this.moduleKey = moduleKey;
-		this.sweepStake = sweepStake;
+		this.epsilonId = epsilonId;
 		this.localTimeZone = localTimeZone;
 		this.promotionName = promotionName;
 	}
@@ -79,14 +79,14 @@ public class PromotionRequestforUpdate {
 	/**
 	 * @return the sweepStake
 	 */
-	public String getSweepStake() {
-		return sweepStake;
+	public String getEpsilonId() {
+		return epsilonId;
 	}
 	/**
 	 * @param sweepStake the sweepStake to set
 	 */
-	public void setSweepStake(String sweepStake) {
-		this.sweepStake = sweepStake;
+	public void setEpsilonId(String epsilonId) {
+		this.epsilonId = epsilonId;
 	}
 	/**
 	 * @return the localTimeZone

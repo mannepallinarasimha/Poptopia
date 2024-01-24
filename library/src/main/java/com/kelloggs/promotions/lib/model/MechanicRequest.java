@@ -12,8 +12,8 @@ import java.util.Date;
 public class MechanicRequest {
 
 	private String type;
-	private String startDate;
-	private String endDate;
+	private Date startDate;
+	private Date endDate;
 	private String attr1_code;
 	private String attr1_value;
 	/**
@@ -30,7 +30,7 @@ public class MechanicRequest {
 	 * @param attr1_code
 	 * @param attr1_value
 	 */
-	public MechanicRequest(String type, String startDate, String endDate, String attr1_code, String attr1_value) {
+	public MechanicRequest(String type, Date startDate, Date endDate, String attr1_code, String attr1_value) {
 		super();
 		this.type = type;
 		this.startDate = startDate;
@@ -53,25 +53,25 @@ public class MechanicRequest {
 	/**
 	 * @return the startDate
 	 */
-	public String getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 	/**
 	 * @param startDate the startDate to set
 	 */
-	public void setStartDate(String startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 	/**
 	 * @return the endDate
 	 */
-	public String getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 	/**
 	 * @param endDate the endDate to set
 	 */
-	public void setEndDate(String endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 	/**
@@ -98,4 +98,8 @@ public class MechanicRequest {
 	public void setAttr1_value(String attr1_value) {
 		this.attr1_value = attr1_value;
 	}
+	
+	
+	
+
 }
