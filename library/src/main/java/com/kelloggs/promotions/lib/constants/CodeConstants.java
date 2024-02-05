@@ -15,7 +15,10 @@ public enum CodeConstants {
 	 */
 	WM("wm"),
 	TOS("tos"),
-	POOL("pool");
+	POOL("pool"),
+	/* added by pranit (10715288) */
+	TRUE("true"),
+	FALSE("false");
 
     private String status;
 

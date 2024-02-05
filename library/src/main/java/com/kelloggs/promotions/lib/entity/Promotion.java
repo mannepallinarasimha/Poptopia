@@ -35,7 +35,7 @@ public class Promotion extends Audit {
     private String name;
 
     @NotNull(message = "Epsilon Id cannot be null or empty")
-    @Column(name = "Epsilon_sweepstakes_Id", nullable = false, unique = true)
+    @Column(name = "Epsilon_sweepstakes_Id", nullable = false, unique = false)
     private Integer epsilonId;
 
     @NotNull(message = "Start Date cannot be null or empty")
@@ -53,7 +53,7 @@ public class Promotion extends Audit {
     private Integer maxLimit;
 
     @NotBlank(message = "Module Key cannot be null or empty")
-    @Column(name = "Module_Key", nullable = false, unique = true,columnDefinition = "NVARCHAR(100)")
+    @Column(name = "Module_Key", nullable = false, unique = false,columnDefinition = "NVARCHAR(100)")
     private String moduleKey;
 
     @Column(name = "Local_Time_Zone",columnDefinition = "VARCHAR(100)")
