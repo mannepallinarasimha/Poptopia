@@ -1,19 +1,20 @@
 package com.kelloggs.promotions.lib.entity;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import org.json.simple.JSONObject;
+
+
+
 
 /**
  * Add MiniGame Entity
@@ -29,16 +30,11 @@ public class MiniGame {
     private Integer id;
 
     @NotBlank(message = "GameId cannot be null or empty")
-    @Column(name = "game_id", nullable = false, unique = true, columnDefinition = "VARCHAR(100)")
+    @Column(name = "game_id",unique = true, columnDefinition = "VARCHAR(100)")
     private String gameId;
 
-    @ElementCollection  
-    @Column(name="profileId", nullable=false)
-    @CollectionTable(
-        name="minigame_profileid_collection",
-        joinColumns=@JoinColumn(name="game_id", 
-        referencedColumnName = "id"))
-    private Set<Integer> profileId;
+    @Column(name = "profile_Id", unique = false ,columnDefinition = "VARCHAR(100)")
+    private Integer profileId;
     
     @NotNull(message = "Created Date cannot be null or empty")
     @Column(name = "created_date", nullable = false)
@@ -47,12 +43,12 @@ public class MiniGame {
     @NotNull(message = "Updated Date cannot be null or empty")
     @Column(name = "updated_date", nullable = false)
     private LocalDateTime updated;
+    
+    @Column(name = "state")
+    private JSONObject state;
 
-    @NotBlank(message = "State cannot be null or empty")
-    @Column(name = "state", nullable = false, unique = true, columnDefinition = "VARCHAR(100)")
-    private String state;
-
-    public Integer getId() {
+    
+	public Integer getId() {
         return id;
     }
 
@@ -66,14 +62,6 @@ public class MiniGame {
 
     public void setGameId(String gameId) {
         this.gameId = gameId;
-    }
-
-    public Set<Integer> getProfileId() {
-        return profileId;
-    }
-
-    public void setProfileId(Set<Integer> profileId) {
-        this.profileId = profileId;
     }
 
     public LocalDateTime getCreated() {
@@ -92,11 +80,20 @@ public class MiniGame {
         this.updated = updated;
     }
 
-    public String getState() {
-        return state;
-    }
+	public JSONObject getState() {
+		return state;
+	}
 
-    public void setState(String state) {
-        this.state = state;
-    }
+	public void setState(JSONObject state) {
+		this.state = state;
+	}
+
+	public Integer getProfileId() {
+		return profileId;
+	}
+
+	public void setProfileId(Integer profileId) {
+		this.profileId = profileId;
+	}
+   
 }

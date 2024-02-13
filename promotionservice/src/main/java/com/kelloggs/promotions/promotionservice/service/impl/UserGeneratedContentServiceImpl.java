@@ -1,18 +1,14 @@
 package com.kelloggs.promotions.promotionservice.service.impl;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.HashMap;
-import java.util.Map;import java.util.Optional;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -30,9 +26,10 @@ import com.kelloggs.promotions.lib.model.ApiListResponse;
 import com.kelloggs.promotions.lib.model.ApiResponse;
 import com.kelloggs.promotions.lib.model.CreateUGCRequest;
 import com.kelloggs.promotions.lib.model.CreateUGCResponse;
-import com.kelloggs.promotions.lib.model.GetUGCResponse;
 import com.kelloggs.promotions.lib.model.CreateUGCStatusDTO;
-import com.kelloggs.promotions.lib.repository.TokenRepo;import com.kelloggs.promotions.lib.repository.UserGeneratedContentRepo;
+import com.kelloggs.promotions.lib.model.GetUGCResponse;
+import com.kelloggs.promotions.lib.repository.TokenRepo;
+import com.kelloggs.promotions.lib.repository.UserGeneratedContentRepo;
 import com.kelloggs.promotions.lib.repository.UserGeneratedEntryRepo;
 import com.kelloggs.promotions.promotionservice.service.UserGeneratedContentService;
 
@@ -40,7 +37,7 @@ import com.kelloggs.promotions.promotionservice.service.UserGeneratedContentServ
 * Add UserGeneratedContentServiceImpl for the user_generated_content Entity
 * 
 * @author NARASIMHARAO MANNEPALLI (10700939)
-* @since 30th January 2024
+* @since 07th Feb 2024
 */
 
 @Service
@@ -71,38 +68,32 @@ public class UserGeneratedContentServiceImpl implements UserGeneratedContentServ
             throw new ApiException(HttpStatus.BAD_REQUEST, 400,
                     String.format("Content with StartDate and EndDate MUST NOT be null OR Empty"));
         }
-        String requiredStartDateFromString = getRequiredDateFromString(createUGCRequest.getStart());
-        String requiredEndDateFromString = getRequiredDateFromString(createUGCRequest.getEnd());
-        final String df = "yyyy-MM-dd HH:mm:ss";
-        SimpleDateFormat simpleDateFormate = new SimpleDateFormat(df);
-        Date contentStartDateFormat = null;
-		Date contentEndDateFormat = null;
-		try {
-			contentStartDateFormat = simpleDateFormate.parse(requiredStartDateFromString);
-			contentEndDateFormat = simpleDateFormate.parse(requiredEndDateFromString);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
 
-         if (!(isDatePastTodayFuture(requiredStartDateFromString, df))) {
+		if (!createUGCRequest.getStart().contains("T") || !createUGCRequest.getStart().contains("Z")
+				|| !createUGCRequest.getEnd().contains("T") || !createUGCRequest.getEnd().contains("Z")) {
+			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
+					"Content with dates is must be JSON date format like (yyyy-MM-ddTHH:mm:ss.SSSZ)."));
+		}
+		LocalDateTime reqStartDateTime = LocalDateTime.ofInstant(Instant.parse(createUGCRequest.getStart()),
+				ZoneId.of(ZoneOffset.UTC.getId()));
+		LocalDateTime reqEndDateTime = LocalDateTime.ofInstant(Instant.parse(createUGCRequest.getEnd()),
+				ZoneId.of(ZoneOffset.UTC.getId()));
+         if (!(isDatePastTodayFuture(createUGCRequest.getStart()))) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
 					.format("Content with Start Date \'%s\'  MUST NOT be past dates.", createUGCRequest.getStart()));
-		} else if (!(isDatePastTodayFuture(requiredEndDateFromString, df))) {
+		} else if (!(isDatePastTodayFuture(createUGCRequest.getEnd()))) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
 					.format("Content with End Date \'%s\'  MUST NOT be past dates.", createUGCRequest.getEnd()));
-		} else if (!(contentEndDateFormat.getTime() > contentStartDateFormat.getTime())) {
+		} else if (!(reqStartDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() < reqEndDateTime
+		.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
 					.format("Content with End Date \'%s\' must be Grater Than Start Date \'%s\'", createUGCRequest.getEnd(),
                     createUGCRequest.getStart()));
 		}
 
-        LocalDateTime contentStartDateTime = contentStartDateFormat.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        LocalDateTime contentEndDateTime = contentEndDateFormat.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        System.out.println(contentStartDateTime);
-        System.out.println(contentEndDateTime);
         userGeneratedContent.setName(createUGCRequest.getName());
-        userGeneratedContent.setStart(contentStartDateTime);
-        userGeneratedContent.setEnd(contentEndDateTime);
+        userGeneratedContent.setStart(reqStartDateTime);
+        userGeneratedContent.setEnd(reqEndDateTime);
         userGeneratedContent.setCreated(LocalDateTime.now());
         UserGeneratedContent savedContent = userGeneratedContentRepo.save(userGeneratedContent);
         createUGCResponse.setUgcId(savedContent.getId());
@@ -197,21 +188,21 @@ public class UserGeneratedContentServiceImpl implements UserGeneratedContentServ
 		return ts[0] + " " + ts[1].substring(0, 8);
 	}
 
-    /**
-	 * Add isDatePastTodayFuture for the UserGeneratedContentServiceImpl Layer
+	/**
+	 * Add isDatePastTodayFuture for the PromotionServiceImpl Layer
 	 * 
 	 * @author NARASIMHARAO MANNEPALLI (10700939)
-	 * @since 30th January 2024
+	 * @since 7th Feb 2024
 	 */
-	public static boolean isDatePastTodayFuture(final String date, final String dateFormat) {
+	public static boolean isDatePastTodayFuture(final String date) {
 		boolean flag = false;
-		LocalDate localDate = LocalDate.now(ZoneId.systemDefault());
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		LocalDate inputDate = LocalDate.parse(date, formatter);
-
-		if (inputDate.isBefore(localDate)) {
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		LocalDateTime reqStartDateTime = LocalDateTime.ofInstant(Instant.parse(date),
+				ZoneId.of(ZoneOffset.UTC.getId()));
+		if (reqStartDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() < currentDateTime
+				.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()) {
 			flag = false;
-		} else if (inputDate.isEqual(localDate) || inputDate.isAfter(localDate)) {
+		} else {
 			flag = true;
 		}
 		return flag;
@@ -249,6 +240,7 @@ public class UserGeneratedContentServiceImpl implements UserGeneratedContentServ
 	 */
 	@Override
 	public CreateUGCStatusDTO setUGCStatus(CreateUGCStatusDTO createUGCStatusDto) {
+		validateUGCData(createUGCStatusDto);
 		String userToken=createUGCStatusDto.getUserToken();
 		Integer ugcId=createUGCStatusDto.getUgcId();
 		String status=createUGCStatusDto.getStatus();
@@ -288,6 +280,23 @@ public class UserGeneratedContentServiceImpl implements UserGeneratedContentServ
 		return getCreateUGCStatusDTO(ugcId,status);
 	}
 	
+	void validateUGCData(CreateUGCStatusDTO createUGCStatusDto) {
+		String result="";
+		if (createUGCStatusDto.getUgcId() == null) {
+			result=result+"UGC Id,";
+		} 
+		if (createUGCStatusDto.getUserToken() == null || createUGCStatusDto.getUserToken().isEmpty()) {
+			result=result+" User Token,";
+		}
+		if (createUGCStatusDto.getStatus() == null || createUGCStatusDto.getStatus().isEmpty()) {
+			result=result+" UGC Status";
+		}
+		
+		if(!result.isEmpty()) {
+			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(result+" Not Found"));
+		}
+	}
+	
 	UserGeneratedEntry getUserGeneratedEntry(Integer ugcId,Integer userId) {
 		UserGeneratedEntry uge=new UserGeneratedEntry();
 		uge.setUgcId(ugcId);
@@ -310,6 +319,9 @@ public class UserGeneratedContentServiceImpl implements UserGeneratedContentServ
 	 */
 	@Override
 	public CreateUGCStatusDTO getUGCStatus(Integer ugcId,String userToken) {
+		if (ugcId==null || userToken == null || userToken.isEmpty()) {
+			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format("User Id Or Token Not Found"));
+		}
 		String status="";
 		Optional<Token> optionalToken=tokenRepo.findByHashCode(userToken);
 		Integer profileId=null;
@@ -347,6 +359,9 @@ public class UserGeneratedContentServiceImpl implements UserGeneratedContentServ
      */
 	@Override
 	public Map<String, Integer> getProfileId(String userToken) {
+		if (userToken == null || userToken.isEmpty()) {
+			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format("User Token Not Found"));
+		}
 		Map<String, Integer> entryDetails =null;
 		Optional<Token> optionalToken=tokenRepo.findByHashCode(userToken);
 		if(optionalToken.isPresent()) {
