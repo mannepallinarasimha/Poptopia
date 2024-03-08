@@ -1,0 +1,133 @@
+package com.kelloggs.promotions.promotionservice.service.impl;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import com.kelloggs.promotions.lib.entity.UserGeneratedContent;
+import com.kelloggs.promotions.lib.exception.ApiException;
+import com.kelloggs.promotions.lib.model.ApiResponse;
+import com.kelloggs.promotions.lib.model.CreateUGCRequest;
+import com.kelloggs.promotions.lib.model.CreateUGCResponse;
+import com.kelloggs.promotions.lib.repository.UserGeneratedContentRepo;
+import com.kelloggs.promotions.promotionservice.service.UserGeneratedContentService;
+
+
+@Service
+public class UserGeneratedContentServiceImpl implements UserGeneratedContentService {
+
+    @Autowired
+    private UserGeneratedContentRepo userGeneratedContentRepo;
+
+    @Override
+    public ApiResponse<CreateUGCResponse> createUGC(@Valid CreateUGCRequest createUGCRequest) {
+        CreateUGCResponse createUGCResponse = new CreateUGCResponse();
+        UserGeneratedContent userGeneratedContent = new UserGeneratedContent();
+        contentNameValidation(createUGCRequest.getName());
+        String requiredStartDateFromString = getRequiredDateFromString(createUGCRequest.getStart());
+        String requiredEndDateFromString = getRequiredDateFromString(createUGCRequest.getEnd());
+        final String df = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat simpleDateFormate = new SimpleDateFormat(df);
+        Date contentStartDateFormat = null;
+		Date contentEndDateFormat = null;
+		try {
+			contentStartDateFormat = simpleDateFormate.parse(requiredStartDateFromString);
+			contentEndDateFormat = simpleDateFormate.parse(requiredEndDateFromString);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+        if (!(isDatePastTodayFuture(requiredStartDateFromString, df))) {
+			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
+					.format("Content with Start Date \'%s\'  MUST NOT be past dates.", createUGCRequest.getStart()));
+		} else if (!(isDatePastTodayFuture(requiredEndDateFromString, df))) {
+			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
+					.format("Content with End Date \'%s\'  MUST NOT be past dates.", createUGCRequest.getEnd()));
+		} else if (!(contentEndDateFormat.getTime() > contentStartDateFormat.getTime())) {
+			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
+					.format("Content with End Date \'%s\' must be Grater Than Start Date \'%s\'", createUGCRequest.getEnd(),
+                    createUGCRequest.getStart()));
+		}
+
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDate startDate = LocalDate.parse(requiredStartDateFromString, formatter);
+        LocalDate endDate = LocalDate.parse(requiredEndDateFromString, formatter);
+
+        LocalDateTime contentStartDateTime = contentStartDateFormat.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime contentEndDateTime = contentEndDateFormat.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        System.out.println(contentStartDateTime);
+        System.out.println(contentEndDateTime);
+        userGeneratedContent.setName(createUGCRequest.getName());
+        userGeneratedContent.setStart(contentStartDateTime);
+        userGeneratedContent.setEnd(contentEndDateTime);
+        userGeneratedContent.setCreated(LocalDateTime.now());
+        UserGeneratedContent savedContent = userGeneratedContentRepo.save(userGeneratedContent);
+        createUGCResponse.setUgcId(savedContent.getId());
+        createUGCResponse.setName(savedContent.getName());
+        createUGCResponse.setStart(createUGCRequest.getStart());
+        createUGCResponse.setEnd(createUGCRequest.getEnd());
+        return new ApiResponse<CreateUGCResponse>("Created UGC is :--- ", createUGCResponse);
+    }
+
+    public static String getRequiredDateFromString(String str) {
+		String[] ts = str.split("T");
+		return ts[0] + " " + ts[1].substring(0, 8);
+	}
+
+    /**
+	 * Add isDatePastTodayFuture for the UserGeneratedContentServiceImpl Layer
+	 * 
+	 * @author NARASIMHARAO MANNEPALLI (10700939)
+	 * @since 30th January 2024
+	 */
+	public static boolean isDatePastTodayFuture(final String date, final String dateFormat) {
+		boolean flag = false;
+		LocalDate localDate = LocalDate.now(ZoneId.systemDefault());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDate inputDate = LocalDate.parse(date, formatter);
+
+		if (inputDate.isBefore(localDate)) {
+			flag = false;
+		} else if (inputDate.isEqual(localDate) || inputDate.isAfter(localDate)) {
+			flag = true;
+		}
+		return flag;
+	}
+
+    /**
+	 * Add contentNameValidation for the UserGeneratedContentServiceImpl Layer
+	 * 
+	 * @author NARASIMHARAO MANNEPALLI (10700939)
+	 * @since 30th January 2024
+	 */
+	public void contentNameValidation(String contentName) {
+		if (contentName == null
+				|| contentName.equals(null)
+				|| contentName.isEmpty()) {
+			throw new ApiException(HttpStatus.BAD_REQUEST, 400, String.format(
+					"Content with Name is \'%s\' now. It Should NOT be null or Empty ", contentName));
+		} else if (!contentName.isEmpty()
+				|| !contentName.equals(null)
+				|| !contentName.isBlank()) {
+			Optional<UserGeneratedContent> findByName = userGeneratedContentRepo.findByName(contentName);
+			if (findByName.isPresent()) {
+				throw new ApiException(HttpStatus.BAD_REQUEST, 400, String
+						.format("Content with Name \'%s\' is already Exists with ContentId \'%d\'", contentName,
+								findByName.get().getId()));
+			}
+		}
+	}
+}

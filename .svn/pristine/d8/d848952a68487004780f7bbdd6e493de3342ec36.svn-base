@@ -1,0 +1,90 @@
+package com.kelloggs.promotions.lib.entity;
+
+import java.time.LocalDateTime;
+import java.util.Set;
+
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+	/**
+	 * Add MiniGame Entity
+	 * 
+	 * @author NARASIMHARAO MANNEPALLI (10700939)
+	 * @since 29th January 2024
+	 */
+@Entity
+@Table(name = "mini_game")
+public class MiniGame {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ElementCollection  
+    @Column(name="profileId", nullable=false)
+    @CollectionTable(
+        name="minigame_profileid_collection",
+        joinColumns=@JoinColumn(name="game_id", 
+        referencedColumnName = "id"))
+    private Set<Integer> profileId;
+    
+    @NotNull(message = "Created Date cannot be null or empty")
+    @Column(name = "created_date", nullable = false)
+    private LocalDateTime created;
+
+    @NotNull(message = "Updated Date cannot be null or empty")
+    @Column(name = "updated_date", nullable = false)
+    private LocalDateTime updated;
+
+    @NotBlank(message = "State cannot be null or empty")
+    @Column(name = "state", nullable = false, unique = true, columnDefinition = "VARCHAR(100)")
+    private String state;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setGameId(Integer id) {
+        this.id = id;
+    }
+
+    public Set<Integer> getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(Set<Integer> profileId) {
+        this.profileId = profileId;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public LocalDateTime getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(LocalDateTime updated) {
+        this.updated = updated;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }    
+}

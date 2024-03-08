@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>library</module>
+        <module>promotionservice</module>
+        <module>codevalidatorservice</module>
+        <module>rewardservice</module>
+        <module>winnerservice</module>
+    </modules>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.7.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.kelloggs</groupId>
+    <artifactId>PoptopiaPromotions</artifactId>
+    <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version> 
+    <name>Poptopia Promotions</name>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <java.version>11</java.version>
+	<log4j2.version>2.18.0</log4j2.version>
+	<hibernate-validator.version>7.0.4.Final</hibernate-validator.version>
+	<spring-framework.version>5.3.18</spring-framework.version>
+	<jackson.version>2.13.2</jackson.version>
+    </properties>
+    <dependencies>
+
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter</artifactId>
+		<exclusions>
+			<exclusion>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-logging</artifactId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-log4j2</artifactId>
+	</dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+    </dependencies>
+    <repositories>
+			<repository>
+				<id>central maven repo</id>
+				<name>central maven repo https</name>
+				<url>https://repo.maven.apache.org/maven2</url>
+			</repository>
+	</repositories>
+	
+	<!--
+	<build>
+		
+		<finalName>globalpromo</finalName>
+        <plugins>           
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>/assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>  
+		    
+    </build>
+	--> 
+	
+	
+	<build>
+	<plugins>
+	     <plugin>
+	         <groupId>org.apache.maven.plugins</groupId>
+	         <artifactId>maven-compiler-plugin</artifactId>
+	         <version>3.8.1</version>
+	     </plugin>
+	</plugins>
+	</build>
+
+</project>

@@ -1,0 +1,9 @@
+package com.kelloggs.promotions.promotionservice.service;
+
+import com.kelloggs.promotions.lib.model.MiniGameDTO;
+
+public interface MiniGameService {
+	
+	MiniGameDTO setMiniGame(MiniGameDTO miniGameDTO);
+
+}

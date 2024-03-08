@@ -1,0 +1,27 @@
+spring.datasource.driverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+spring.jpa.show-sql=true
+spring.jpa.hibernate.dialect=org.hibernate.dialect.SQLServer2012Dialect
+spring.jpa.hibernate.ddl-auto = update
+#spring.datasource.url=jdbc:sqlserver://mssqlsedev5.chmolvzyzv8o.us-east-1.rds.amazonaws.com:1433;databaseName=Pringles_Promotions_AMEA
+#spring.datasource.username=Pringles_Promotions_AMEA
+#spring.datasource.password=N21vlhH32m
+
+#spring.datasource.url=jdbc:sqlserver://mssqlsedev2.chmolvzyzv8o.us-east-1.rds.amazonaws.com:1433;databaseName=kelloggsbreakfastcoupons_ca
+#spring.datasource.username=kelloggsbreakfastcoupons_ca
+#spring.datasource.password=sPIEZvQ9aF
+
+#spring.datasource.url=jdbc:sqlserver://mssqlsedev2.chmolvzyzv8o.us-east-1.rds.amazonaws.com:1433;databaseName=KelloggsGaming_ca
+#spring.datasource.username=KelloggsGaming_ca
+#spring.datasource.password=ihLScuWwgP
+
+spring.datasource.url=jdbc:sqlserver://mssqlsedev1.chmolvzyzv8o.us-east-1.rds.amazonaws.com:1433;databaseName=Poptopia
+spring.datasource.username=Poptopia
+spring.datasource.password=2MK22uei6U
+
+logging.config=classpath:log4j2.xml
+
+#Specify the path of the OpenAPI documentation
+springdoc.api-docs.path=/api-docs
+springdoc.swagger-ui.disable-swagger-default-url=true
+spring.jpa.hibernate.format_sql=true

@@ -1,0 +1,12 @@
+package com.kelloggs.promotions.promotionservice.service;
+
+import javax.validation.Valid;
+
+import com.kelloggs.promotions.lib.model.ApiResponse;
+import com.kelloggs.promotions.lib.model.CreateUGCRequest;
+import com.kelloggs.promotions.lib.model.CreateUGCResponse;
+
+public interface UserGeneratedContentService {
+
+    ApiResponse<CreateUGCResponse> createUGC(@Valid CreateUGCRequest createUGCRequest);
+}

@@ -1,0 +1,20 @@
+package com.kelloggs.promotions.lib.repository;
+
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.kelloggs.promotions.lib.entity.UserGeneratedEntry;
+
+@Repository
+public interface UserGeneratedEntryRepo extends JpaRepository<UserGeneratedEntry, Integer>{
+
+   Optional<UserGeneratedEntry> findByUgcIdAndUserId(Integer ugcId,Integer userId);
+   
+   Optional<List<UserGeneratedEntry>> findByUgcId(@Valid Integer ugcId);
+
+}
